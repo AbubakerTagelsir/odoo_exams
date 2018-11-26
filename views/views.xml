@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+	<!-- Adds all assets in Odoo -->
+        <!-- <template id="assets_backend" name="examination assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/examination/static/src/js/timer2.js"></script>sea
+            </xpath>
+        </template> -->
+        <template id="survey_page_edited" inherit_id="survey.page">
+            <xpath expr="//div[@class='page-header']" position="inside">
+                <link rel="stylesheet" href="/examination/static/src/css/timer.css" />
+                <script type="text/javascript" src="/examination/static/src/js/timer2.js"/>
+                <h5>REMAINING Time:</h5>
+                <div class="main_container" id="id_main_container">
+                    <div class="container_inner" id="target_time_banner">
+                    </div>
+                </div>
+                <!-- <h4 id="target_time_banner"></h4> -->
+                
+                
+                <!-- <script>
+                    var ending_time = new Date().getTime() + 60000;
+                    var x = setInterval(function() {
+                        var now = new Date().getTime();
+                        var distance = ending_time - now;
+                        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                        // Display the result in the element with id="demo"
+                        document.getElementById("target_time_banner").innerHTML = hours + "h " +
+                            minutes + "m " + seconds + "s ";
+
+                        // If the count down is finished, write some text 
+                        if (distance == 0) {
+                            clearInterval(x);
+                            document.getElementById("target_time_banner").innerHTML = "aaa";
+                        }
+                    }, 1000);                
+                </script> -->
+            </xpath>
+        </template>
+    </data>
+</openerp>
