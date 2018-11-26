@@ -1,15 +1,5 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields, api
 from openerp.osv import fields, osv
-from openerp.tools.translate import _
-from openerp import SUPERUSER_ID
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT as DF
-from openerp.addons.website.models.website import slug
-from urlparse import urljoin
-from itertools import product
-from collections import Counter
-from collections import OrderedDict
-from openerp.exceptions import UserError
 
 import datetime
 import logging

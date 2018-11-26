@@ -1,10 +1,3 @@
-var ending_time = new Date().getTime() + 10000;
-var x = setInterval(function) {
-    var current = new Date().getTime();
-    var interval = ending_time - current;
-
-}
-
 //var seconds = 5400; #Total duration of the exam 90min
 //
 //function secondPassed() {
