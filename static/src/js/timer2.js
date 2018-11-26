@@ -1,5 +1,5 @@
 // Set the date we're counting down to
-var countDownDate = new Date().getTime() + 10000;
+var countDownDate = new Date().getTime() + 5000;
 
 // Update the count down every 1 second
 var x = setInterval(function() {
@@ -24,19 +24,34 @@ var x = setInterval(function() {
     if (distance < 0) {
         clearInterval(x);
         document.getElementById("target_time_banner").innerHTML = "Done";
-        // odoo.define('custom_webpage.my_js', function(require) {
-        //     'use strict';
-        //     var ajax = require('web.ajax');
-        //     ajax.jsonRpc("/", 'call').then(function(result) {
-        //         console.log(result);
-        //     });
-        // })
-        $.ajax({
-            type: "POST",
-            url: "~/survey/submit",
-            data: { param: {} }
-        }).done(function(o) {
-            // do something
-        });
+//        console.log(this.dataset)
+        odoo.define('examination.my_js', function(require) {
+             'use strict';
+             var ajax = require('web.ajax');
+             console.log("Here")
+             $.ajax({
+             type: "POST",
+             url:'/survey/submit/shimaa-1',
+             data: {'page_id': 1, 'task': 'addcode', 'format': 'json'},
+             dataType: 'json',
+             success: function (response) {
+             console.log(response);
+             }
+             });
+});
+//             ajax.jsonRpc("/survey/submit/shimaa-1", 'call').then(function(result) {
+//                 console.log("inner console");
+//                 console.log(result);
+//             });
+//         })
+//        $.ajax({
+//            type: "POST",
+//            url: "/survey/submit/shimaa-1",
+//            data: { param: {
+//                "page_id":this.recordData
+//            } }
+//        }).done(function(o) {
+//            // do something
+//        });
     }
 }, 1000);

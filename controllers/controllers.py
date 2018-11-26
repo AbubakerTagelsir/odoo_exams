@@ -5,8 +5,13 @@ import werkzeug.utils
 from datetime import datetime
 from math import ceil
 
+from openerp import SUPERUSER_ID
+from openerp.addons.web import http
+from openerp.addons.web.http import request
+from openerp.tools.misc import DEFAULT_SERVER_DATETIME_FORMAT as DTF, ustr
 import openerp.http as http
 from openerp.http import request
+_logger = logging.getLogger(__name__)
 
 class WebsiteSurvey(http.Controller):
 
@@ -26,9 +31,61 @@ class WebsiteSurvey(http.Controller):
             tmp_score = ret.get(answer.question_id.id, 0.0)
             ret.update({answer.question_id.id: tmp_score + answer.quizz_mark})
             if json.dumps(ret)<70:
-                return "Fill"
+                return "Fail"
             elif json.dumps(ret)>=70:
                return "Pass"
+
+    # AJAX submission of a page
+    @http.route(['/survey/submit/<model("survey.survey"):survey>'],
+                type='http', methods=['POST'], auth='public', website=True, csrf=False)
+    def submit(self, survey, **post):
+        _logger.debug('Incoming data: %s', post)
+        print(post)
+        page_id = int(post['page_id'])
+        cr, uid, context = request.cr, request.uid, request.context
+        survey_obj = request.registry['survey.survey']
+        questions_obj = request.registry['survey.question']
+        questions_ids = questions_obj.search(cr, uid, [('page_id', '=', page_id)], context=context)
+        questions = questions_obj.browse(cr, uid, questions_ids, context=context)
+
+        # Answer validation
+        errors = {}
+        for question in questions:
+            answer_tag = "%s_%s_%s" % (survey.id, page_id, question.id)
+            errors.update(questions_obj.validate_question(cr, uid, question, post, answer_tag, context=context))
+
+        ret = {}
+        if (len(errors) != 0):
+            # Return errors messages to webpage
+            ret['errors'] = errors
+        else:
+            # Store answers into database
+            user_input_obj = request.registry['survey.user_input']
+
+            user_input_line_obj = request.registry['survey.user_input_line']
+            try:
+                user_input_id = user_input_obj.search(cr, SUPERUSER_ID, [('token', '=', post['token'])], context=context)[0]
+            except KeyError:  # Invalid token
+                return request.website.render("website.403")
+            user_input = user_input_obj.browse(cr, SUPERUSER_ID, user_input_id, context=context)
+            user_id = uid if user_input.type != 'link' else SUPERUSER_ID
+            for question in questions:
+                answer_tag = "%s_%s_%s" % (survey.id, page_id, question.id)
+                user_input_line_obj.save_lines(cr, user_id, user_input_id, question, post, answer_tag, context=context)
+
+            go_back = post['button_submit'] == 'previous'
+            next_page, _, last = survey_obj.next_page(cr, uid, user_input, page_id, go_back=go_back, context=context)
+            vals = {'last_displayed_page_id': page_id}
+            if next_page is None and not go_back:
+                vals.update({'state': 'done'})
+            else:
+                vals.update({'state': 'skip'})
+            user_input_obj.write(cr, user_id, user_input_id, vals, context=context)
+            ret['redirect'] = '/survey/fill/%s/%s' % (survey.id, post['token'])
+            if go_back:
+                ret['redirect'] += '/prev'
+        return json.dumps(ret)
+
 #
 # # class Examination(http.Controller):
 # #     @http.route('/examination/examination/', auth='public')

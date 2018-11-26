@@ -22,14 +22,15 @@ class Examination(osv.Model):
 class SurveyScore(osv.Model):
     _inherit = "survey.user_input"
 
-    score = fields.selection([('fill','Fill'),('pass','Pass')],compute="compute_score")
+    score = fields.char(default="score")
+
     def compute_score(self, cr, uid, ids, name, args, context=None):
 
-        if self.quizz_score<70:
-            return self.score=="fill"
-        elif self.quizz_score>=70:
-            return self.score=="pass"
-
+        if self.quizz_score < 70:
+            self.score == "fail"
+        elif self.quizz_score >= 70:
+            self.score == "pass"
+        return self.score
 
 
 
