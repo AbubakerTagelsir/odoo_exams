@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="survey_name_id1" model="survey.survey">
+        <field name="title">Yusra Zaki</field>
+        </record>
+
+          <record id="survey_name_id2" model="survey.survey">
+        <field name="title">Amell Arbab</field>
+        </record>
+
+          <record id="survey_name_id3" model="survey.survey">
+        <field name="title">Montaser</field>
+        </record>
+
+          <record id="survey_name_id4" model="survey.survey">
+        <field name="title">Samah Mohammed</field>
+        </record>
+
+          <record id="survey_page_id1" model="survey.page">
+        <field name="title">Page1</field>
+        <field name="survey_id" ref="survey_name_id1"></field>
+        </record>
+
+        <record id="survey_question_id1" model="survey.question">
+        <field name="question">What the best channel used when information should be limited to specific users/employees (such as department specific or sensitive information)?</field>
+        <field name="page_id" ref="survey_page_id1"></field>
+            <field name="type">simple_choice</field>
+        </record>
+
+           <record id="survey_question1_choice1" model="survey.label">
+        <field name="value">public channel</field>
+        <field name="question_id" ref="survey_question_id1"></field>
+        </record>
+
+         <record id="survey_question1_choice2" model="survey.label">
+        <field name="value">private channel</field>
+        <field name="question_id" ref="survey_question_id1"></field>
+        </record>
+
+         <record id="survey_question_id2" model="survey.question">
+        <field name="question">How can  control which groups can view each channel?</field>
+        <field name="page_id" ref="survey_page_id1"></field>
+            <field name="type">simple_choice</field>
+        </record>
+
+           <record id="survey_question2_choice1" model="survey.label">
+        <field name="value"> By changing channel access rights you can make a channel visible by all users, invited users, or users within a selected user group</field>
+        <field name="question_id" ref="survey_question_id2"></field>
+        </record>
+
+         <record id="survey_question2_choice2" model="survey.label">
+        <field name="value">By changing channel access rights you can make a channel visible by auto subscribe department</field>
+        <field name="question_id" ref="survey_question_id2"></field>
+        </record>
+
+
+
+
+         <!--<record id="survey_page_id2" model="survey.page">-->
+        <!--<field name="title">Page2</field>-->
+        <!--</record>-->
+
+         <!--<record id="survey_page_id3" model="survey.page">-->
+        <!--<field name="title">Page3</field>-->
+        <!--</record>-->
+
+         <!--<record id="survey_page_id4" model="survey.page">-->
+        <!--<field name="title">Page4</field>-->
+        <!--</record>-->
+
+          <!--<record id="survey_page_id5" model="survey.page">-->
+        <!--<field name="title">Page5</field>-->
+        <!--</record>-->
+
+    </data>
+</openerp>
